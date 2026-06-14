@@ -1,3 +1,13 @@
+# Changelog
+
+All notable changes to opscale-co/nova-comments will be documented in this file.
+
+## [1.0.1](https://github.com/opscale-co/nova-comments/compare/v1.0.0...v1.0.1) (2026-06-14)
+
+### Bug Fixes
+
+* **ci:** align release config with other opscale packages ([f4e73d8](https://github.com/opscale-co/nova-comments/commit/f4e73d85e1d86fabd5bc4779e7cc5640972b6f65))
+
 # Changelog — opscale-co/nova-comments
 
 All notable changes to this project are documented here.
