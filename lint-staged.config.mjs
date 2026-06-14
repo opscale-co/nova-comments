@@ -1,8 +1,4 @@
 export default {
-    "*.php": [
-        "vendor/bin/duster lint"
-    ],
-    "*.{js,vue}": [
-        "eslint"
-    ]
-}
+    '*.php': ['./vendor/bin/duster fix'],
+    '*.{js,vue,ts}': ['./vendor/bin/duster fix'],
+};

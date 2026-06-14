@@ -1,0 +1,29 @@
+{
+    "branches": ["main"],
+    "plugins": [
+        "@semantic-release/commit-analyzer",
+        "@semantic-release/release-notes-generator",
+        [
+            "@semantic-release/changelog",
+            {
+                "changelogFile": "CHANGELOG.md",
+                "changelogTitle": "# Changelog — opscale-co/nova-comments\n\nAll notable changes to this project are documented here.\nThis project follows [Semantic Versioning](https://semver.org/) and [Conventional Commits](https://www.conventionalcommits.org/)."
+            }
+        ],
+        [
+            "@semantic-release/exec",
+            {
+                "prepareCmd": "jq --arg v \"${nextRelease.version}\" '.version = $v' composer.json > composer.tmp && mv composer.tmp composer.json",
+                "publishCmd": "curl -fsSL -XPOST -H 'content-type:application/json' \"https://packagist.org/api/update-package?username=${PACKAGIST_USERNAME}&apiToken=${PACKAGIST_TOKEN}\" -d '{\"repository\":{\"url\":\"https://github.com/'\"${GITHUB_REPOSITORY}\"'\"}}'"
+            }
+        ],
+        [
+            "@semantic-release/git",
+            {
+                "assets": ["CHANGELOG.md", "composer.json"],
+                "message": "chore(release): ${nextRelease.version} [skip ci]\n\n${nextRelease.notes}"
+            }
+        ],
+        "@semantic-release/github"
+    ]
+}

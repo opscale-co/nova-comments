@@ -7,12 +7,26 @@
     "prod": "npm run production",
     "production": "mix --production",
     "lint": "vendor/bin/duster lint && npx eslint",
-    "fix": "vendor/bin/duster fix && npx eslint --fix"
+    "lint:fix": "vendor/bin/duster fix && npx eslint --fix",
+    "fix": "npm run lint:fix",
+    "test": "vendor/bin/phpunit --exclude-testsuite=Browser",
+    "test:unit": "vendor/bin/phpunit --testsuite=Unit",
+    "test:feature": "vendor/bin/phpunit --testsuite=Feature",
+    "test:browser": "vendor/bin/phpunit --testsuite=Browser",
+    "test:coverage": "vendor/bin/phpunit --exclude-testsuite=Browser --coverage-clover=coverage.xml",
+    "analyse": "vendor/bin/phpstan analyse",
+    "analyse:report": "vendor/bin/phpstan analyse --error-format=json > phpstan-report.json || true",
+    "refactor": "vendor/bin/rector --dry-run",
+    "refactor:apply": "vendor/bin/rector",
+    "release:dry": "semantic-release --dry-run"
   },
   "devDependencies": {
     "@commitlint/cli": "^21.0.2",
     "@commitlint/config-conventional": "^21.0.2",
     "@eslint/js": "^9.39.4",
+    "@semantic-release/changelog": "^6.0.3",
+    "@semantic-release/exec": "^7.1.0",
+    "@semantic-release/git": "^10.0.1",
     "@vue/compiler-sfc": "^3.4",
     "eslint": "^9.39.4",
     "eslint-config-prettier": "^10.1.8",
@@ -21,6 +35,7 @@
     "laravel-mix": "^6.0",
     "lint-staged": "^17.0.7",
     "postcss": "^8.4",
+    "semantic-release": "^24.2.9",
     "vue-loader": "^17.0"
   },
   "dependencies": {
