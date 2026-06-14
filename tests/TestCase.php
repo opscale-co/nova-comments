@@ -1,24 +1,66 @@
 <?php
 
-namespace :namespace_vendor\:namespace_tool_name\Tests;
+declare(strict_types=1);
 
-use Illuminate\Support\Facades\Route;
+namespace Opscale\NovaComments\Tests;
+
+use Illuminate\Foundation\Application;
+use Inertia\ServiceProvider as InertiaServiceProvider;
+use Laravel\Fortify\FortifyServiceProvider;
+use Laravel\Nova\NovaCoreServiceProvider;
+use Opscale\NovaComments\Models\Comment;
+use Opscale\NovaComments\ToolServiceProvider;
 use Orchestra\Testbench\TestCase as Orchestra;
-use :namespace_vendor\:namespace_tool_name\ToolServiceProvider;
+use Workbench\App\Providers\NovaServiceProvider as WorkbenchNovaServiceProvider;
+use Workbench\App\Providers\WorkbenchServiceProvider;
 
 abstract class TestCase extends Orchestra
 {
-    public function setUp(): void
+    protected function setUp(): void
     {
         parent::setUp();
 
-        Route::middlewareGroup('nova', []);
+        $this->loadLaravelMigrations();
+        $this->loadMigrationsFrom(__DIR__ . '/../vendor/laravel/nova/database/migrations');
+        $this->loadMigrationsFrom(__DIR__ . '/../database/migrations');
+        $this->loadMigrationsFrom(__DIR__ . '/../workbench/database/migrations');
     }
 
-    protected function getPackageProviders($app)
+    protected function tearDown(): void
+    {
+        Comment::whenCreating(null);
+
+        parent::tearDown();
+    }
+
+    /**
+     * @param  Application  $app
+     * @return array<int, class-string>
+     */
+    protected function getPackageProviders($app): array
     {
         return [
+            InertiaServiceProvider::class,
+            FortifyServiceProvider::class,
+            NovaCoreServiceProvider::class,
             ToolServiceProvider::class,
+            WorkbenchServiceProvider::class,
+            WorkbenchNovaServiceProvider::class,
         ];
+    }
+
+    /**
+     * @param  Application  $app
+     */
+    protected function defineEnvironment($app): void
+    {
+        $app['config']->set('database.default', 'sqlite');
+        $app['config']->set('database.connections.sqlite', [
+            'driver' => 'sqlite',
+            'database' => ':memory:',
+            'prefix' => '',
+        ]);
+        $app['config']->set('auth.providers.users.model', \Workbench\App\Models\User::class);
+        $app['config']->set('nova-comments.commenter.nova-resource', \Workbench\App\Nova\User::class);
     }
 }

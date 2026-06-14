@@ -18,9 +18,11 @@ export default [
     prettierConfig,
     {
         languageOptions: {
-            ecmaVersion: 2018,
+            ecmaVersion: 2022,
             globals: {
                 Nova: true,
+                _: 'readonly',
+                moment: 'readonly',
                 ...globals.browser,
                 ...globals.node,
             },
@@ -28,6 +30,8 @@ export default [
         rules: {
             'vue/html-indent': ['error', 2],
             'vue/multi-word-component-names': 'off',
+            'vue/component-definition-name-casing': 'off',
+            'vue/no-v-html': 'off',
         }
     }
 ];

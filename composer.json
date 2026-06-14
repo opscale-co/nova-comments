@@ -1,12 +1,21 @@
 {
-    "name": ":vendor/:package_name",
-    "description": ":package_description",
+    "name": "opscale-co/nova-comments",
+    "description": "Polymorphic comments field for any Laravel Nova Resource — Opscale fork of kirschbaum-development/nova-comments.",
     "keywords": [
         "laravel",
         "nova",
-        "package",
-        "tool",
+        "comments",
+        "polymorphic",
         "opscale"
+    ],
+    "homepage": "https://github.com/opscale-co/nova-comments",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Opscale",
+            "email": "development@opscale.co",
+            "role": "Developer"
+        }
     ],
     "repositories": [
         {
@@ -14,50 +23,75 @@
             "url": "https://nova.laravel.com"
         }
     ],
-    "homepage": "https://github.com/:vendor/:package_name",
-    "license": "MIT",
-    "authors": [
-        {
-            "name": ":author_name",
-            "email": ":author_email",
-            "role": "Developer"
-        }
-    ],
     "require": {
         "php": ">=8.2",
-        "ext-readline": "*"
+        "laravel/nova": "^5.4",
+        "opscale-co/nova-package-tools": "^1.1"
+    },
+    "require-dev": {
+        "larastan/larastan": "^2.10",
+        "laravel/dusk": "^8.2",
+        "laravel/nova-devtool": "^1.0",
+        "mockery/mockery": "^1.6",
+        "orchestra/testbench": "^9.0",
+        "orchestra/testbench-dusk": "^9.0",
+        "phpunit/phpunit": "^10.5",
+        "tightenco/duster": "^2.7"
     },
     "autoload": {
         "psr-4": {
-            ":namespace_vendor\\:namespace_tool_name\\": "src/"
+            "Opscale\\NovaComments\\": "src/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            ":namespace_vendor\\:namespace_tool_name\\Tests\\": "tests"
+            "Opscale\\NovaComments\\Tests\\": "tests/",
+            "Workbench\\App\\": "workbench/app/",
+            "Workbench\\Database\\Factories\\": "workbench/database/factories/",
+            "Workbench\\Database\\Seeders\\": "workbench/database/seeders/"
         }
     },
     "extra": {
         "laravel": {
             "providers": [
-                ":namespace_vendor\\:namespace_tool_name\\ToolServiceProvider"
+                "Opscale\\NovaComments\\ToolServiceProvider"
             ]
         }
     },
+    "scripts": {
+        "prepare": "@php vendor/bin/testbench-dusk package:discover --ansi",
+        "build": [
+            "@php vendor/bin/testbench workbench:build --ansi"
+        ],
+        "start": [
+            "Composer\\Config::disableProcessTimeout",
+            "@composer run build",
+            "@php vendor/bin/testbench serve --ansi"
+        ],
+        "serve": [
+            "@composer run start"
+        ],
+        "test": [
+            "@composer run prepare",
+            "@php vendor/bin/phpunit"
+        ],
+        "test-browser": [
+            "@composer run prepare",
+            "@php vendor/bin/phpunit --testsuite=Browser"
+        ],
+        "lint": [
+            "@php vendor/bin/duster lint"
+        ],
+        "fix": [
+            "@php vendor/bin/duster fix"
+        ]
+    },
     "config": {
-        "sort-packages": true
+        "sort-packages": true,
+        "allow-plugins": {
+            "pestphp/pest-plugin": true
+        }
     },
     "minimum-stability": "dev",
-    "prefer-stable": true,
-    "require-dev": {
-        "laravel/nova": "^5.4",
-        "laravel/nova-devtool": "^1.0",
-        "phpunit/phpunit": "^10.5",
-        "tightenco/duster": "^2.7"
-    },
-    "script" : {
-        "post-autoload-dump": [
-            "@php artisan vendor:publish --tag=laravel-assets --ansi --force"
-        ]
-    }
+    "prefer-stable": true
 }
