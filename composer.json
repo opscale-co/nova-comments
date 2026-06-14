@@ -1,110 +1,111 @@
 {
-    "name": "opscale-co/nova-comments",
-    "description": "Polymorphic comments field for any Laravel Nova Resource — Opscale fork of kirschbaum-development/nova-comments.",
-    "keywords": [
-        "laravel",
-        "nova",
-        "comments",
-        "polymorphic",
-        "opscale"
+  "name": "opscale-co/nova-comments",
+  "description": "Polymorphic comments field for any Laravel Nova Resource — Opscale fork of kirschbaum-development/nova-comments.",
+  "keywords": [
+    "laravel",
+    "nova",
+    "comments",
+    "polymorphic",
+    "opscale"
+  ],
+  "homepage": "https://github.com/opscale-co/nova-comments",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Opscale",
+      "email": "development@opscale.co",
+      "role": "Developer"
+    }
+  ],
+  "repositories": [
+    {
+      "type": "composer",
+      "url": "https://nova.laravel.com"
+    }
+  ],
+  "require": {
+    "php": ">=8.2",
+    "laravel/nova": "^5.4",
+    "opscale-co/nova-package-tools": "^1.1"
+  },
+  "require-dev": {
+    "larastan/larastan": "^2.10",
+    "laravel/dusk": "^8.2",
+    "laravel/nova-devtool": "^1.0",
+    "mockery/mockery": "^1.6",
+    "orchestra/testbench": "^9.0",
+    "orchestra/testbench-dusk": "^9.0",
+    "phpunit/phpunit": "^10.5",
+    "rector/rector": "^1.2",
+    "rector/rector-laravel": "^1.2",
+    "tightenco/duster": "^2.7"
+  },
+  "autoload": {
+    "psr-4": {
+      "Opscale\\NovaComments\\": "src/"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "Opscale\\NovaComments\\Tests\\": "tests/",
+      "Workbench\\App\\": "workbench/app/",
+      "Workbench\\Database\\Factories\\": "workbench/database/factories/",
+      "Workbench\\Database\\Seeders\\": "workbench/database/seeders/"
+    }
+  },
+  "extra": {
+    "laravel": {
+      "providers": [
+        "Opscale\\NovaComments\\ToolServiceProvider"
+      ]
+    }
+  },
+  "scripts": {
+    "prepare": "@php vendor/bin/testbench-dusk package:discover --ansi",
+    "build": [
+      "@php vendor/bin/testbench workbench:build --ansi"
     ],
-    "homepage": "https://github.com/opscale-co/nova-comments",
-    "license": "MIT",
-    "authors": [
-        {
-            "name": "Opscale",
-            "email": "development@opscale.co",
-            "role": "Developer"
-        }
+    "start": [
+      "Composer\\Config::disableProcessTimeout",
+      "@composer run build",
+      "@php vendor/bin/testbench serve --ansi"
     ],
-    "repositories": [
-        {
-            "type": "composer",
-            "url": "https://nova.laravel.com"
-        }
+    "serve": [
+      "@composer run start"
     ],
-    "require": {
-        "php": ">=8.2",
-        "laravel/nova": "^5.4",
-        "opscale-co/nova-package-tools": "^1.1"
-    },
-    "require-dev": {
-        "larastan/larastan": "^2.10",
-        "laravel/dusk": "^8.2",
-        "laravel/nova-devtool": "^1.0",
-        "mockery/mockery": "^1.6",
-        "orchestra/testbench": "^9.0",
-        "orchestra/testbench-dusk": "^9.0",
-        "phpunit/phpunit": "^10.5",
-        "rector/rector": "^1.2",
-        "rector/rector-laravel": "^1.2",
-        "tightenco/duster": "^2.7"
-    },
-    "autoload": {
-        "psr-4": {
-            "Opscale\\NovaComments\\": "src/"
-        }
-    },
-    "autoload-dev": {
-        "psr-4": {
-            "Opscale\\NovaComments\\Tests\\": "tests/",
-            "Workbench\\App\\": "workbench/app/",
-            "Workbench\\Database\\Factories\\": "workbench/database/factories/",
-            "Workbench\\Database\\Seeders\\": "workbench/database/seeders/"
-        }
-    },
-    "extra": {
-        "laravel": {
-            "providers": [
-                "Opscale\\NovaComments\\ToolServiceProvider"
-            ]
-        }
-    },
-    "scripts": {
-        "prepare": "@php vendor/bin/testbench-dusk package:discover --ansi",
-        "build": [
-            "@php vendor/bin/testbench workbench:build --ansi"
-        ],
-        "start": [
-            "Composer\\Config::disableProcessTimeout",
-            "@composer run build",
-            "@php vendor/bin/testbench serve --ansi"
-        ],
-        "serve": [
-            "@composer run start"
-        ],
-        "test": [
-            "@composer run prepare",
-            "@php vendor/bin/phpunit"
-        ],
-        "test-browser": [
-            "@composer run prepare",
-            "@php vendor/bin/phpunit --testsuite=Browser"
-        ],
-        "lint": [
-            "@php vendor/bin/duster lint"
-        ],
-        "fix": [
-            "@php vendor/bin/duster fix"
-        ],
-        "analyse": [
-            "@php vendor/bin/phpstan analyse"
-        ],
-        "refactor": [
-            "@php vendor/bin/rector --dry-run"
-        ],
-        "check": [
-            "@composer run lint",
-            "@composer run analyse",
-            "@composer run test"
-        ]
-    },
-    "config": {
-        "sort-packages": true,
-        "allow-plugins": {
-            "pestphp/pest-plugin": true
-        }
-    },
-    "minimum-stability": "dev",
-    "prefer-stable": true
+    "test": [
+      "@composer run prepare",
+      "@php vendor/bin/phpunit"
+    ],
+    "test-browser": [
+      "@composer run prepare",
+      "@php vendor/bin/phpunit --testsuite=Browser"
+    ],
+    "lint": [
+      "@php vendor/bin/duster lint"
+    ],
+    "fix": [
+      "@php vendor/bin/duster fix"
+    ],
+    "analyse": [
+      "@php vendor/bin/phpstan analyse"
+    ],
+    "refactor": [
+      "@php vendor/bin/rector --dry-run"
+    ],
+    "check": [
+      "@composer run lint",
+      "@composer run analyse",
+      "@composer run test"
+    ]
+  },
+  "config": {
+    "sort-packages": true,
+    "allow-plugins": {
+      "pestphp/pest-plugin": true
+    }
+  },
+  "minimum-stability": "dev",
+  "prefer-stable": true,
+  "version": "1.0.0"
 }
