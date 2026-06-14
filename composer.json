@@ -36,6 +36,8 @@
         "orchestra/testbench": "^9.0",
         "orchestra/testbench-dusk": "^9.0",
         "phpunit/phpunit": "^10.5",
+        "rector/rector": "^1.2",
+        "rector/rector-laravel": "^1.2",
         "tightenco/duster": "^2.7"
     },
     "autoload": {
@@ -84,6 +86,17 @@
         ],
         "fix": [
             "@php vendor/bin/duster fix"
+        ],
+        "analyse": [
+            "@php vendor/bin/phpstan analyse"
+        ],
+        "refactor": [
+            "@php vendor/bin/rector --dry-run"
+        ],
+        "check": [
+            "@composer run lint",
+            "@composer run analyse",
+            "@composer run test"
         ]
     },
     "config": {
