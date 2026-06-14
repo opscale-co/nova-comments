@@ -1,0 +1,37 @@
+laravel: '@testbench'
+
+env:
+  - APP_LOCALE=es
+  - APP_FALLBACK_LOCALE=es
+  - APP_FAKER_LOCALE=es_ES
+
+providers:
+  - Inertia\ServiceProvider
+  - Laravel\Fortify\FortifyServiceProvider
+  - Laravel\Dusk\DuskServiceProvider
+  - Laravel\Nova\NovaCoreServiceProvider
+  - Laravel\Nova\NovaServiceProvider
+  - Workbench\App\Providers\WorkbenchServiceProvider
+  - Workbench\App\Providers\NovaServiceProvider
+  - Opscale\NovaComments\ToolServiceProvider
+
+seeders:
+  - Workbench\Database\Seeders\DatabaseSeeder
+
+workbench:
+  start: /nova
+  build:
+    - package:discover
+    - asset-publish
+    - create-sqlite-db
+    - db:wipe
+    - migrate:refresh
+    - 'db:seed --class="Workbench\Database\Seeders\DatabaseSeeder"'
+  assets:
+    - nova-assets
+  sync: []
+
+purge:
+  directories:
+    - lang/*
+    - public/vendor/*

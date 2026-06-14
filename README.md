@@ -4,124 +4,136 @@ At Opscale, we’re passionate about contributing to the open-source community b
 
 ⭐ **Star this repository** to help others discover our work and be part of our growing community. Every star makes a difference!
 
-💬 **Share your experience** by leaving a review on [Trustpilot](https://www.trustpilot.com/review/opscale.co) or sharing your thoughts on social media. Your feedback helps us improve and grow!
+💬 **Share your experience** by leaving a review on [Trustpilot](https://www.trustpilot.com/review/opscale.co) or sharing your thoughts on social media.
 
-📧 **Send us feedback** on what we can improve at [feedback@opscale.co](mailto:feedback@opscale.co). We value your input to make our tools even better for everyone.
+📧 **Send us feedback** on what we can improve at [feedback@opscale.co](mailto:feedback@opscale.co).
 
-🙏 **Get involved** by actively contributing to our open-source repositories. Your participation benefits the entire community and helps push the boundaries of what’s possible.
+🙏 **Get involved** by actively contributing to our open-source repositories.
 
-💼 **Hire us** if you need custom dashboards, admin panels, internal tools or MVPs tailored to your business. With our expertise, we can help you systematize operations or enhance your existing product. Contact us at hire@opscale.co to discuss your project needs.
+💼 **Hire us** at hire@opscale.co for custom dashboards, admin panels, internal tools, or MVPs.
 
 Thanks for helping Opscale continue to scale! 🚀
 
-<!--delete-->
-
-## Using this skeleton (remove this section after you have completed these steps)
-
-This repo can be used to scaffold a Laravel package. Follow these steps to get started:
-
-1. Press the "Use this template" button at the top of this repo to create a new repo with the contents of this skeleton.
-
-2. Run "php ./configure.php" to run a script that will replace all placeholders throughout all the files.
-
-3. Check the GitHub Actions workflows you want to keep.
-
-4. If you want to publish your package in Packagist, you can use the publish.sh script.
-
-5. Keep in mind the template is configured with [Duster](https://github.com/tighten/duster) and [Commitlint](https://commitlint.js.org/) 
-
-6. Have fun creating your package.
-
 ---
 
-To use your customized package in a Nova app, add this line in the `require` section of the `composer.json` file:
+## opscale-co/nova-comments
 
-```
-
-":vendor/:package_name": "*",
-
-```
-
-In the same `composer.json` file add a `repositiories` section with the path to your package repo:
-
-```
-
-"repositories": [
-{
-    "type": "path",
-    "url": "../:package_name"
-},
-
-```
-
-Now you're ready to develop your package inside a Nova app.
-
-**When you are done with the steps above delete everything above!**
-
-<!--/delete-->
-
-## Description
-
-:package_description
-
-Add a screenshot of the tool here.
+A Laravel Nova 5 field that adds polymorphic comments to any Nova Resource. This is the Opscale-maintained fork of [`kirschbaum-development/nova-comments`](https://github.com/kirschbaum-development/nova-comments) — same surface area (Commenter ResourceTool, Commentable trait, CommentsPanel, `nova_comments` table, `whenCreating` sanitization hook) under Opscale conventions (`declare(strict_types=1)`, PHPStan level 8, Duster, Semantic Release, single-tenant deployment model).
 
 ## Installation
 
-[![Latest Version on Packagist](https://img.shields.io/packagist/v/:vendor/:package_name.svg?style=flat-square)](https://packagist.org/packages/:vendor/:package_name)
-
-You can install the package in to a Laravel app that uses [Nova](https://nova.laravel.com) via composer:
+[![Latest Version on Packagist](https://img.shields.io/packagist/v/opscale-co/nova-comments.svg?style=flat-square)](https://packagist.org/packages/opscale-co/nova-comments)
 
 ```bash
-
-composer require :vendor/:package_name
-
+composer require opscale-co/nova-comments
+php artisan migrate
 ```
 
-Next up, you must register the tool with Nova. This is typically done in the `tools` method of the `NovaServiceProvider`.
+The service provider auto-registers via package discovery. Publish the config if you need to customize it:
 
-```php
-
-// in app/Providers/NovaServiceProvider.php
-// ...
-public function tools()
-{
-    return [
-        // ...
-        new \:namespace_vendor\:namespace_tool_name\Tool(),
-    ];
-}
-
+```bash
+php artisan vendor:publish --tag=nova-comments-config
 ```
 
 ## Usage
 
-Click on the ":package_name" menu item in your Nova app to see the tool provided by this package.
+### 1. Add the `Commentable` trait to a model
+
+```php
+use Opscale\NovaComments\Commentable;
+
+class Post extends Model
+{
+    use Commentable;
+}
+```
+
+### 2. Add the `Commenter` field to the model's Nova Resource
+
+```php
+use Opscale\NovaComments\Commenter;
+
+public function fields(NovaRequest $request): array
+{
+    return [
+        // ... your other fields ...
+        Commenter::make(),
+    ];
+}
+```
+
+That's it. The comments panel renders on the resource detail page with a Trix rich-text editor (bold, italic, lists, links, etc.). Authenticated Nova users can write comments, paginate older / newer, and submit with the Save button or ⌘+Enter.
+
+### Alternative: the relationship panel
+
+Prefer Nova's standard relationship table over the inline panel? Use the `CommentsPanel`:
+
+```php
+use Opscale\NovaComments\CommentsPanel;
+
+public function fields(NovaRequest $request): array
+{
+    return [
+        // ... fields ...
+        new CommentsPanel(),
+    ];
+}
+```
+
+### Custom sanitization
+
+By default, comments are stored as the Trix-produced HTML as-is. Trix sanitizes input client-side (no `<script>`, no inline event handlers), which covers the common case. If you need server-side sanitization — Markdown rendering, an HTML purifier, or just to be paranoid about direct API calls — register a callback in a service provider:
+
+```php
+use Opscale\NovaComments\Models\Comment;
+
+public function boot(): void
+{
+    Comment::whenCreating(function (Comment $comment): void {
+        $comment->comment = MyPurifier::clean($comment->comment);
+    });
+}
+```
+
+Pass `null` to clear the callback.
+
+## Configuration
+
+`config/nova-comments.php`:
+
+| Key | Default | Purpose |
+|---|---|---|
+| `commenter.nova-resource` | `\App\Nova\User::class` | Nova resource used for the `commenter` BelongsTo field |
+| `comments-panel.name` | `null` (uses translation) | Heading shown above the panel |
+| `limit` | `100` | Max length of the comment preview on the index page |
 
 ## Testing
 
-``` bash
+```bash
+composer install
+vendor/bin/phpunit --exclude-testsuite=Browser
+```
 
-npm run test
+Browser (Dusk) tests run against a workbench Nova app:
 
+```bash
+npm ci && npm run prod      # build dist/ assets
+vendor/bin/phpunit --testsuite=Browser
 ```
 
 ## Changelog
 
-Please see [CHANGELOG](CHANGELOG.md) for more information on what has changed recently.
+See [CHANGELOG](CHANGELOG.md).
 
 ## Contributing
 
-Please see [CONTRIBUTING](https://github.com/opscale-co/.github/blob/main/CONTRIBUTING.md) for details.
-
-## Security
-
-If you discover any security related issues, please email :author_email instead of using the issue tracker.
+Please see [CONTRIBUTING](https://github.com/opscale-co/.github/blob/main/CONTRIBUTING.md).
 
 ## Credits
 
-- [:author_name](https://github.com/:author_username)
+- [Opscale](https://github.com/opscale-co)
+- Inspired by [`kirschbaum-development/nova-comments`](https://github.com/kirschbaum-development/nova-comments) — © Kirschbaum Development Group LLC
 
 ## License
 
-The MIT License (MIT). Please see [License File](LICENSE.md) for more information.
+The MIT License (MIT). Please see [License File](LICENSE.md).

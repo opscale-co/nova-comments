@@ -1,12 +1,17 @@
-let mix = require('laravel-mix')
-let NovaExtension = require('laravel-nova-devtool')
+const mix = require('laravel-mix')
 
-mix.extend('nova', new NovaExtension())
+require('./nova.mix')
 
 mix
   .setPublicPath('dist')
   .js('resources/js/tool.js', 'js')
-  .vue({ version: 3 })
+  .vue({
+    version: 3,
+    options: {
+      compilerOptions: {
+        isCustomElement: (tag) => tag.startsWith('trix-'),
+      },
+    },
+  })
   .css('resources/css/tool.css', 'css')
-  .nova(':vendor/:package_name')
-  .version()
+  .nova('opscale-co/nova-comments')

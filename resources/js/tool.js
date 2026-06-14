@@ -1,5 +1,5 @@
-import Tool from './pages/Tool'
+import Tool from './components/Tool.vue'
 
-Nova.booting((app, store) => {
-  Nova.inertia(':namespace_tool_name', Tool)
+Nova.booting((app) => {
+  app.component('commenter', Tool)
 })
