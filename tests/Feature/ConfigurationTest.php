@@ -39,6 +39,7 @@ class ConfigurationTest extends TestCase
     {
         $this->assertSame(100, config('nova-comments.limit'));
         $this->assertNull(config('nova-comments.comments-panel.name'));
+        $this->assertNull(config('nova-comments.commenter.nova-resource'));
     }
 
     /**

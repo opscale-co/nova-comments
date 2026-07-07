@@ -12,6 +12,7 @@ use Laravel\Nova\Fields\MorphTo;
 use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Fields\Trix;
 use Laravel\Nova\Http\Requests\NovaRequest;
+use Laravel\Nova\Nova;
 use Laravel\Nova\Resource;
 use Opscale\NovaComments\Models\Comment as CommentModel;
 
@@ -40,6 +41,15 @@ class Comment extends Resource
         return false;
     }
 
+    /** @return class-string */
+    private static function commenterResource(): string
+    {
+        $resource = config('nova-comments.commenter.nova-resource')
+            ?: Nova::resourceForModel((string) config('auth.providers.users.model'));
+
+        return (string) $resource;
+    }
+
     /**
      * @return array<int, mixed>
      */
@@ -63,7 +73,7 @@ class Comment extends Resource
             BelongsTo::make(
                 __('nova-comments::fields.commenter'),
                 'commenter',
-                (string) config('nova-comments.commenter.nova-resource'),
+                self::commenterResource(),
             )->exceptOnForms(),
 
             DateTime::make(__('nova-comments::fields.created'), 'created_at')

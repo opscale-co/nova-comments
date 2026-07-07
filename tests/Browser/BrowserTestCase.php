@@ -20,8 +20,8 @@ abstract class BrowserTestCase extends DuskTestCase
         parent::setUp();
 
         $this->loadLaravelMigrations();
-        $this->loadMigrationsFrom(__DIR__ . '/../../database/migrations');
-        $this->loadMigrationsFrom(__DIR__ . '/../../workbench/database/migrations');
+        $this->loadMigrationsFrom(__DIR__.'/../../database/migrations');
+        $this->loadMigrationsFrom(__DIR__.'/../../workbench/database/migrations');
     }
 
     /**
@@ -40,7 +40,6 @@ abstract class BrowserTestCase extends DuskTestCase
     protected function defineEnvironment($app): void
     {
         $app['config']->set('auth.providers.users.model', \Workbench\App\Models\User::class);
-        $app['config']->set('nova-comments.commenter.nova-resource', \Workbench\App\Nova\User::class);
     }
 
     protected function driver(): RemoteWebDriver
