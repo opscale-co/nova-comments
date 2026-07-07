@@ -2,6 +2,12 @@
 
 All notable changes to opscale-co/nova-comments will be documented in this file.
 
+## [1.1.0](https://github.com/opscale-co/nova-comments/compare/v1.0.1...v1.1.0) (2026-07-07)
+
+### Features
+
+* **config:** resolve commenter Nova resource dynamically from auth config ([b4abe32](https://github.com/opscale-co/nova-comments/commit/b4abe323c0a9275dc78d855cb44dd4fa9cdfe39c))
+
 ## [1.0.1](https://github.com/opscale-co/nova-comments/compare/v1.0.0...v1.0.1) (2026-06-14)
 
 ### Bug Fixes
