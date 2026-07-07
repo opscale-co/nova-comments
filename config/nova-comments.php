@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 return [
     'commenter' => [
-        'nova-resource' => \Workbench\App\Nova\User::class,
+        'nova-resource' => null,
     ],
 
     'comments-panel' => [

@@ -21,9 +21,9 @@ abstract class TestCase extends Orchestra
         parent::setUp();
 
         $this->loadLaravelMigrations();
-        $this->loadMigrationsFrom(__DIR__ . '/../vendor/laravel/nova/database/migrations');
-        $this->loadMigrationsFrom(__DIR__ . '/../database/migrations');
-        $this->loadMigrationsFrom(__DIR__ . '/../workbench/database/migrations');
+        $this->loadMigrationsFrom(__DIR__.'/../vendor/laravel/nova/database/migrations');
+        $this->loadMigrationsFrom(__DIR__.'/../database/migrations');
+        $this->loadMigrationsFrom(__DIR__.'/../workbench/database/migrations');
     }
 
     protected function tearDown(): void
@@ -61,6 +61,5 @@ abstract class TestCase extends Orchestra
             'prefix' => '',
         ]);
         $app['config']->set('auth.providers.users.model', \Workbench\App\Models\User::class);
-        $app['config']->set('nova-comments.commenter.nova-resource', \Workbench\App\Nova\User::class);
     }
 }
