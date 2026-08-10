@@ -50,22 +50,71 @@ class CommentModelTest extends TestCase
     /**
      * @test
      */
-    public function it_strips_tags_and_escapes_special_chars_by_default(): void
+    public function it_sanitizes_dangerous_html_by_default(): void
     {
         $post = Post::factory()->create();
 
         $comment = Comment::create([
-            'comment' => '<script>alert("xss")</script>hi & bye',
+            'comment' => '<script>alert("xss")</script>hi & bye'
+                .'<a href="javascript:alert(1)">link</a>'
+                .'<img src="x" onerror="alert(1)">',
             'commentable_type' => Post::class,
             'commentable_id' => $post->id,
         ]);
 
         $stored = $comment->fresh()->comment;
 
+        // Script element and its content are gone.
         $this->assertStringNotContainsString('<script>', $stored);
+        $this->assertStringNotContainsString('alert', $stored);
+        // The javascript: URL and the inline event handler are stripped.
+        $this->assertStringNotContainsString('javascript:', $stored);
+        $this->assertStringNotContainsString('onerror', $stored);
+        // Plain text survives.
         $this->assertStringContainsString('hi', $stored);
-        // FILTER_SANITIZE_SPECIAL_CHARS escapes & < > " '
-        $this->assertStringContainsString('&#38;', $stored);
+        $this->assertStringContainsString('bye', $stored);
+    }
+
+    /**
+     * @test
+     */
+    public function it_keeps_rich_text_and_attachment_markup_when_sanitizing(): void
+    {
+        $post = Post::factory()->create();
+
+        $comment = Comment::create([
+            'comment' => '<div><strong>bold</strong> and a '
+                .'<a href="/storage/nova-comments/attachments/a.png">file</a></div>'
+                .'<figure class="attachment" data-trix-attachment="{}">'
+                .'<img src="/storage/nova-comments/attachments/a.png" alt="a"></figure>',
+            'commentable_type' => Post::class,
+            'commentable_id' => $post->id,
+        ]);
+
+        $stored = $comment->fresh()->comment;
+
+        $this->assertStringContainsString('<strong>bold</strong>', $stored);
+        $this->assertStringContainsString('<figure', $stored);
+        // The uploaded attachment URL is preserved so it renders after saving.
+        $this->assertStringContainsString('/storage/nova-comments/attachments/a.png', $stored);
+    }
+
+    /**
+     * @test
+     */
+    public function it_does_not_sanitize_when_the_sanitizer_is_disabled(): void
+    {
+        config()->set('nova-comments.sanitizer.enabled', false);
+
+        $post = Post::factory()->create();
+
+        $comment = Comment::create([
+            'comment' => '<script>alert("xss")</script>keep',
+            'commentable_type' => Post::class,
+            'commentable_id' => $post->id,
+        ]);
+
+        $this->assertStringContainsString('<script>', $comment->fresh()->comment);
     }
 
     /**

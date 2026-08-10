@@ -20,6 +20,8 @@
             input="commenter"
             dusk="commenter-textarea"
             @trix-change="comment = $event.target.value"
+            @trix-attachment-add="uploadAttachment"
+            @trix-attachment-remove="removeAttachment"
             @keydown.enter.meta="createComment"
             @keydown.enter.ctrl="createComment"
           ></trix-editor>
@@ -95,6 +97,7 @@ export default {
   data() {
     return {
       baseCommentUri: '/nova-api/comments',
+      attachmentUri: '/nova-vendor/nova-comments/attachments',
       comment: '',
       data: {
         next_page_url: '',
@@ -170,6 +173,46 @@ export default {
     resetComment() {
       this.comment = ''
       this.$refs.editor?.editor?.loadHTML('')
+    },
+
+    uploadAttachment(event) {
+      const attachment = event.attachment
+
+      // Only file attachments need to be uploaded; pasted URLs already have one.
+      if (!attachment.file) return
+
+      const form = new FormData()
+      form.append('attachment', attachment.file)
+
+      Nova.request()
+        .post(this.attachmentUri, form, {
+          headers: { 'Content-Type': 'multipart/form-data' },
+          onUploadProgress: (progress) => {
+            const percent = progress.total
+              ? (progress.loaded / progress.total) * 100
+              : 0
+            attachment.setUploadProgress(percent)
+          },
+        })
+        .then(({ data }) => {
+          attachment.setAttributes({ url: data.url, href: data.url })
+        })
+        .catch((error) => {
+          Nova.error('The attachment could not be uploaded.')
+          attachment.remove()
+          if (error) Nova.error(error)
+        })
+    },
+
+    removeAttachment(event) {
+      const url = event.attachment.getAttribute('url')
+
+      // Nothing stored server-side yet (e.g. upload never finished).
+      if (!url) return
+
+      Nova.request()
+        .delete(this.attachmentUri, { data: { url } })
+        .catch(() => {})
     },
   },
 }

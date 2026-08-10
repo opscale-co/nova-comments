@@ -7,6 +7,7 @@ namespace Opscale\NovaComments\Models\Repositories;
 use Closure;
 use Illuminate\Support\Facades\Auth;
 use Opscale\NovaComments\Models\Comment;
+use Opscale\NovaComments\Support\CommentSanitizer;
 
 trait CommentRepository
 {
@@ -26,7 +27,11 @@ trait CommentRepository
 
             if (static::$whenCreating !== null) {
                 (static::$whenCreating)($comment);
+
+                return;
             }
+
+            $comment->comment = app(CommentSanitizer::class)->sanitize((string) $comment->comment);
         });
     }
 }
