@@ -11,7 +11,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('posts', function (Blueprint $table): void {
-            $table->id();
+            $table->ulid('id')->primary();
             $table->string('title');
             $table->text('body');
             $table->timestamps();

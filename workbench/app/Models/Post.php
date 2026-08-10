@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Workbench\App\Models;
 
+use Illuminate\Database\Eloquent\Concerns\HasUlids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Opscale\NovaComments\Commentable;
@@ -13,6 +14,7 @@ class Post extends Model
 {
     use Commentable;
     use HasFactory;
+    use HasUlids;
 
     protected $fillable = ['title', 'body'];
 

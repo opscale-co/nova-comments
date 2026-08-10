@@ -19,6 +19,7 @@ class ToolServiceProvider extends NovaPackageServiceProvider
             ->discoversMigrations()
             ->runsMigrations()
             ->hasResource(Comment::class)
-            ->hasNovaAssets('nova-comments', __DIR__ . '/../dist');
+            ->hasNovaApiRoute(__DIR__.'/../routes/api.php', 'nova-comments')
+            ->hasNovaAssets('nova-comments', __DIR__.'/../dist');
     }
 }

@@ -65,7 +65,7 @@ class CommentResourceApiTest extends TestCase
         ]);
 
         $response = $this->getJson(sprintf(
-            '/nova-api/comments?orderBy=created_at&orderByDirection=desc&viaResource=posts&viaResourceId=%d&viaRelationship=comments&relationshipType=hasMany',
+            '/nova-api/comments?orderBy=created_at&orderByDirection=desc&viaResource=posts&viaResourceId=%s&viaRelationship=comments&relationshipType=hasMany',
             $post->id,
         ));
 

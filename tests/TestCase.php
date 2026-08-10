@@ -20,7 +20,9 @@ abstract class TestCase extends Orchestra
     {
         parent::setUp();
 
-        $this->loadLaravelMigrations();
+        // The default Laravel users table uses a bigint key. This package targets
+        // ULID/UUID commentables and commenters, so the workbench ships its own
+        // ULID users/posts migrations to exercise that path end-to-end.
         $this->loadMigrationsFrom(__DIR__.'/../vendor/laravel/nova/database/migrations');
         $this->loadMigrationsFrom(__DIR__.'/../database/migrations');
         $this->loadMigrationsFrom(__DIR__.'/../workbench/database/migrations');
