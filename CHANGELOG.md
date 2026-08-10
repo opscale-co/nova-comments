@@ -2,6 +2,16 @@
 
 All notable changes to opscale-co/nova-comments will be documented in this file.
 
+## [1.2.0](https://github.com/opscale-co/nova-comments/compare/v1.1.0...v1.2.0) (2026-08-10)
+
+### Features
+
+* **comments:** persist Trix attachments and sanitize comment HTML ([b9e7bf3](https://github.com/opscale-co/nova-comments/commit/b9e7bf3c241b0b227c76359644f7f7e5caff421a))
+
+### Bug Fixes
+
+* **migration:** use ULID keys for commentable and commenter ([8fbcc07](https://github.com/opscale-co/nova-comments/commit/8fbcc070dd6081546f5038da15074f970bdb1282))
+
 ## [1.1.0](https://github.com/opscale-co/nova-comments/compare/v1.0.1...v1.1.0) (2026-07-07)
 
 ### Features
