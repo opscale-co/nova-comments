@@ -2,6 +2,18 @@
 
 All notable changes to opscale-co/nova-comments will be documented in this file.
 
+## [2.0.0](https://github.com/opscale-co/nova-comments/compare/v1.2.0...v2.0.0) (2026-11-07)
+
+### ⚠ BREAKING CHANGES
+
+* **laravel:** requires PHP 8.3+ and the Laravel 13 toolchain; drops Laravel 11/12.
+
+Co-Authored-By: Claude Opus 4.8 (1M context) <noreply@anthropic.com>
+
+### Features
+
+* **laravel:** require Laravel 13, drop Laravel 11/12 ([a3595f6](https://github.com/opscale-co/nova-comments/commit/a3595f6e00b9184fede6deb6654cc3fec98d4da2))
+
 ## [1.2.0](https://github.com/opscale-co/nova-comments/compare/v1.1.0...v1.2.0) (2026-08-10)
 
 ### Features
