@@ -7,14 +7,13 @@ namespace Opscale\NovaComments\Tests\Unit;
 use Illuminate\Support\Facades\Auth;
 use Opscale\NovaComments\Models\Comment;
 use Opscale\NovaComments\Tests\TestCase;
+use PHPUnit\Framework\Attributes\Test;
 use Workbench\App\Models\Post;
 use Workbench\App\Models\User;
 
 class CommentModelTest extends TestCase
 {
-    /**
-     * @test
-     */
+    #[Test]
     public function it_sets_commenter_id_from_authenticated_user_on_create(): void
     {
         $user = User::factory()->create();
@@ -31,9 +30,7 @@ class CommentModelTest extends TestCase
         $this->assertSame($user->id, $comment->fresh()->commenter_id);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_leaves_commenter_id_null_when_unauthenticated(): void
     {
         $post = Post::factory()->create();
@@ -47,9 +44,7 @@ class CommentModelTest extends TestCase
         $this->assertNull($comment->fresh()->commenter_id);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_sanitizes_dangerous_html_by_default(): void
     {
         $post = Post::factory()->create();
@@ -75,9 +70,7 @@ class CommentModelTest extends TestCase
         $this->assertStringContainsString('bye', $stored);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_keeps_rich_text_and_attachment_markup_when_sanitizing(): void
     {
         $post = Post::factory()->create();
@@ -99,9 +92,7 @@ class CommentModelTest extends TestCase
         $this->assertStringContainsString('/storage/nova-comments/attachments/a.png', $stored);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_does_not_sanitize_when_the_sanitizer_is_disabled(): void
     {
         config()->set('nova-comments.sanitizer.enabled', false);
@@ -117,9 +108,7 @@ class CommentModelTest extends TestCase
         $this->assertStringContainsString('<script>', $comment->fresh()->comment);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_runs_the_when_creating_callback_instead_of_the_default_sanitizer(): void
     {
         Comment::whenCreating(function (Comment $c): void {
@@ -139,9 +128,7 @@ class CommentModelTest extends TestCase
         $this->assertSame('<B>HELLO</B>', $comment->fresh()->comment);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function when_creating_can_be_reset_to_null(): void
     {
         Comment::whenCreating(fn (Comment $c) => $c->comment = 'overridden');
@@ -157,9 +144,7 @@ class CommentModelTest extends TestCase
         $this->assertSame('normal', $comment->fresh()->comment);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_resolves_commenter_relation_against_configured_user_model(): void
     {
         $user = User::factory()->create();
@@ -177,9 +162,7 @@ class CommentModelTest extends TestCase
         $this->assertSame($user->id, $comment->commenter->id);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_morphs_to_the_commentable(): void
     {
         $post = Post::factory()->create();

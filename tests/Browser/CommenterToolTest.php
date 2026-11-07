@@ -5,14 +5,13 @@ declare(strict_types=1);
 namespace Opscale\NovaComments\Tests\Browser;
 
 use Laravel\Dusk\Browser;
+use PHPUnit\Framework\Attributes\Test;
 use Workbench\App\Models\Post;
 use Workbench\App\Models\User;
 
 class CommenterToolTest extends BrowserTestCase
 {
-    /**
-     * @test
-     */
+    #[Test]
     public function it_renders_the_commenter_panel_on_the_post_detail_page(): void
     {
         $user = User::factory()->create();
@@ -26,9 +25,7 @@ class CommenterToolTest extends BrowserTestCase
         });
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_creates_a_comment_when_the_save_button_is_clicked(): void
     {
         $user = User::factory()->create();
@@ -51,9 +48,7 @@ class CommenterToolTest extends BrowserTestCase
         ]);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_does_not_submit_an_empty_comment(): void
     {
         $user = User::factory()->create();

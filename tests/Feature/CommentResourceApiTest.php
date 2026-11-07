@@ -6,14 +6,13 @@ namespace Opscale\NovaComments\Tests\Feature;
 
 use Opscale\NovaComments\Models\Comment;
 use Opscale\NovaComments\Tests\TestCase;
+use PHPUnit\Framework\Attributes\Test;
 use Workbench\App\Models\Post;
 use Workbench\App\Models\User;
 
 class CommentResourceApiTest extends TestCase
 {
-    /**
-     * @test
-     */
+    #[Test]
     public function posting_to_nova_api_comments_creates_a_comment_attributed_to_the_authenticated_user(): void
     {
         $user = User::factory()->create();
@@ -38,9 +37,7 @@ class CommentResourceApiTest extends TestCase
         $this->assertStringContainsString('hello from nova', $stored->comment);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function getting_nova_api_comments_returns_comments_in_desc_created_at_order(): void
     {
         $user = User::factory()->create();
@@ -76,9 +73,7 @@ class CommentResourceApiTest extends TestCase
         $this->assertSame($second->id, $resources[0]['id']['value'] ?? null);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function unauthenticated_post_is_rejected_by_nova(): void
     {
         $post = Post::factory()->create();

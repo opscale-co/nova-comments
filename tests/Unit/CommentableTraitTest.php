@@ -7,13 +7,12 @@ namespace Opscale\NovaComments\Tests\Unit;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Opscale\NovaComments\Models\Comment;
 use Opscale\NovaComments\Tests\TestCase;
+use PHPUnit\Framework\Attributes\Test;
 use Workbench\App\Models\Post;
 
 class CommentableTraitTest extends TestCase
 {
-    /**
-     * @test
-     */
+    #[Test]
     public function the_trait_exposes_a_morph_many_named_comments_pointing_at_the_comment_model(): void
     {
         $post = Post::factory()->create();
@@ -26,9 +25,7 @@ class CommentableTraitTest extends TestCase
         $this->assertSame('nova_comments.commentable_id', $relation->getQualifiedForeignKeyName());
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function creating_comments_via_the_relation_stores_correct_morph_columns(): void
     {
         $post = Post::factory()->create();

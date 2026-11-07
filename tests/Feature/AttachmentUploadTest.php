@@ -7,13 +7,12 @@ namespace Opscale\NovaComments\Tests\Feature;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
 use Opscale\NovaComments\Tests\TestCase;
+use PHPUnit\Framework\Attributes\Test;
 use Workbench\App\Models\User;
 
 class AttachmentUploadTest extends TestCase
 {
-    /**
-     * @test
-     */
+    #[Test]
     public function it_stores_an_uploaded_attachment_and_returns_its_url(): void
     {
         Storage::fake('public');
@@ -35,9 +34,7 @@ class AttachmentUploadTest extends TestCase
         $this->assertCount(1, Storage::disk('public')->allFiles('nova-comments/attachments'));
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_rejects_a_disallowed_file_type(): void
     {
         Storage::fake('public');
@@ -53,9 +50,7 @@ class AttachmentUploadTest extends TestCase
         $this->assertCount(0, Storage::disk('public')->allFiles('nova-comments/attachments'));
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_requires_authentication(): void
     {
         Storage::fake('public');
@@ -68,9 +63,7 @@ class AttachmentUploadTest extends TestCase
         $this->assertCount(0, Storage::disk('public')->allFiles('nova-comments/attachments'));
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_deletes_an_attachment_by_url(): void
     {
         Storage::fake('public');

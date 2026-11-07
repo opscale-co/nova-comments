@@ -8,20 +8,17 @@ use Illuminate\Http\Request;
 use Opscale\NovaComments\Commenter;
 use Opscale\NovaComments\Nova\Comment as NovaComment;
 use Opscale\NovaComments\Tests\TestCase;
+use PHPUnit\Framework\Attributes\Test;
 
 class ConfigurationTest extends TestCase
 {
-    /**
-     * @test
-     */
+    #[Test]
     public function comment_resource_is_never_navigable(): void
     {
         $this->assertFalse(NovaComment::availableForNavigation(new Request));
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function comments_panel_name_drives_resource_tool_name(): void
     {
         config(['nova-comments.comments-panel.name' => 'Notes']);
@@ -32,9 +29,7 @@ class ConfigurationTest extends TestCase
         $this->assertSame('commenter', $tool->component());
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function default_config_values_loaded(): void
     {
         $this->assertSame(100, config('nova-comments.limit'));
@@ -42,9 +37,7 @@ class ConfigurationTest extends TestCase
         $this->assertNull(config('nova-comments.commenter.nova-resource'));
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function panel_name_falls_back_to_translation_when_config_is_null(): void
     {
         config(['nova-comments.comments-panel.name' => null]);
